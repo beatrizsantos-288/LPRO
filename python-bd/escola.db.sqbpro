@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="escola.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1057"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="alunos" custom_title="0" dock_id="2" table="4,6:mainalunos"/><dock_state state="000000ff00000000fd00000001000000020000054a00000258fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000000003910000000000000000fb000000160064006f0063006b00420072006f007700730065003201000000000000054a0000011e00ffffff000002690000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="alunos" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort><column index="0" mode="0"/></sort><column_widths><column index="1" value="35"/><column index="2" value="52"/><column index="3" value="40"/><column index="4" value="39"/><column index="5" value="62"/><column index="6" value="43"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="turmas" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="35"/><column index="2" value="40"/><column index="3" value="35"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="inserir_valores">INSERT INTO turmas (id, nome, ano) VALUES
+    (1, '10A', 10),
+    (2, '11A', 11),
+    (3, '12A', 12);
+
+INSERT INTO alunos (id, numero, nome, email, turma_id, media) VALUES
+    (1, 1, 'Ana Costa', 'ana@escola.pt', 3, 16.4),
+    (2, 2, 'Bruno Dias', 'bruno@escola.pt', 3, 12.8),
+    (3, 3, 'Carla Mendes', NULL, 3, 17.9),
+    (4, 1, 'Diogo Faria', 'diogo@escola.pt', 2, 9.6),
+    (5, 2, 'Eva Lopes', 'eva@escola.pt', 2, 14.1),
+    (6, 1, 'Filipe Rocha', 'filipe@escola.pt', 1, NULL),
+    (7, 3, 'Gabriela Sá', 'gabi@escola.pt', NULL, 11.5);
+
+SELECT * FROM alunos;</sql><sql name="SQL 3">-- Todas as colunas de todas as linhas
+SELECT * FROM turmas;
+
+-- Só as colunas que interessam
+SELECT nome, media FROM alunos;
+</sql><sql name="filtrar_com_where">SELECT nome, media FROM alunos
+WHERE media &gt;= 14;
+
+SELECT nome, email FROM alunos
+WHERE email IS NULL;
+
+-- % quer dizer &quot;qualquer texto&quot;
+SELECT nome FROM alunos
+WHERE nome LIKE 'B%' OR nome LIKE '%Sá';
+
+SELECT nome, media FROM alunos
+WHERE turma_id = 3 AND media BETWEEN 12 AND 17;
+</sql><sql name="SQL 5">SELECT nome, media FROM alunos
+WHERE media &gt;= 14;</sql><sql name="Ordenar">SELECT nome, media FROM alunos
+WHERE media IS NOT NULL
+ORDER BY media DESC
+LIMIT 3;
+</sql><sql name="Alterar e apagar">UPDATE alunos SET media = 13.2 WHERE id = 2;
+
+UPDATE alunos SET turma_id = 1 WHERE turma_id IS NULL;
+
+DELETE FROM alunos WHERE id = 6;
+
+SELECT id, nome, turma_id, media FROM alunos;
+</sql><sql name="Contar_Somar_Agrupar">SELECT COUNT(*) AS alunos,
+       COUNT(media) AS com_media,
+       ROUND(AVG(media), 1) AS media_geral,
+       MAX(media) AS melhor
+FROM alunos;
+
+SELECT turma_id, COUNT(*) AS alunos
+FROM alunos
+GROUP BY turma_id;
+
+SELECT turma_id, ROUND(AVG(media), 2) AS media
+FROM alunos
+GROUP BY turma_id
+HAVING AVG(media) &gt;= 12;
+</sql><sql name="Join">SELECT a.nome, t.nome AS turma
+FROM alunos AS a
+JOIN turmas AS t ON t.id = a.turma_id
+ORDER BY turma, a.nome;
+
+-- Alunos sem turma
+SELECT a.nome
+FROM alunos AS a
+LEFT JOIN turmas AS t ON t.id = a.turma_id
+WHERE t.id IS NULL;
+
+-- Quantos alunos tem cada turma
+SELECT t.nome AS turma, COUNT(a.id) AS alunos
+FROM turmas AS t
+LEFT JOIN alunos AS a ON a.turma_id = t.id
+GROUP BY t.id
+ORDER BY t.nome;
+</sql><current_tab id="7"/></tab_sql></sqlb_project>
